@@ -1,101 +1,44 @@
-import { Text, View, Button, Image, TextInput, TouchableOpacity, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState } from "react";
+import React from 'react';
+import { NavigationContainer, NavigationIndependentTree } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeScreen from './page/HomeScreen';
+import DetailScreen from './page/DetailScreen';
 
-export default function Index() {
-  const [isFocused, setIsFocused] = useState(false);
+export type RootStackParamList = {
+  Home: undefined;
+  DetailScreen: { repo: Repository };
+};
+
+export type Repository = {
+  id: number;
+  name: string;
+  description: string;
+  stargazerCount: number;
+  forks: { totalCount: number };
+  primaryLanguage?: { name: string };
+  licenseInfo?: { name: string };
+  watchers: { totalCount: number };
+  createdAt: string;
+  owner: {
+    login: string;
+    avatar_url: string;
+  };
+  html_url: item.html_url
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+const App: React.FC = () => {
   return (
-    
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <View style={{ backgroundColor: "seagreen", padding: 15 }}>
-        <Text style={{ fontSize: 25, color: "white" }}>Lab1: React Native</Text>
-      </View>
-
-      <Image
-         source={require('@/assets/images/circle.png')}
-        style={{
-          width: 100,
-          height: 100,
-          alignSelf: "center",
-          marginTop: 30,
-        }}
-      />
-
-<View style={{ alignItems: "center", marginTop: 30 }}>
-      {/* First row */}
-      <View style={styles.row}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>BUTTON</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>BUTTON</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Second row */}
-      <View style={[styles.row, { marginTop: 20 }]}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>BUTTON</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>BUTTON</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-
-    <View
-      style={{
-        backgroundColor: "white",
-        flexDirection: "row",
-        alignItems: "center",
-        padding: 10,
-        marginTop: 30,
-      }}
-    >
-      <Text style={{ fontSize: 20, color: "black", flex: 1 }}>Email</Text>
-      <TextInput
-        style={[
-          styles.input,
-          isFocused ? styles.inputFocused : styles.inputUnfocused,
-        ]}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        placeholder="Enter your email"
-      />
-    </View>
-    </SafeAreaView>
+    <NavigationIndependentTree>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="DetailScreen" component={DetailScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+    </NavigationIndependentTree>
   );
+};
 
-}
-//styling
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: "row",
-  },
-  button: {
-    margin: 20,
-    backgroundColor: "lightgrey",
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "black",
-    fontSize: 16,
-  },
-  input: {
-    flex: 2,
-    backgroundColor: "white",
-    borderRadius: 5,
-    padding: 10,
-    borderWidth: 2, // Border thickness
-  },
-  inputFocused: {
-    borderColor: "pink", // Border color when focused
-  },
-  inputUnfocused: {
-    borderColor: "gray", // Border color when not focused
-  },
-});
-
+export default App;
